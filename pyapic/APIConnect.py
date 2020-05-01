@@ -337,7 +337,7 @@ class APIConnect:
         return products[0] if products else None
 
 
-    def subscription_create(self, product, application, catalog, plan, consumer_organization=None):
+    def subscription_create(self, product, organization, catalog, application, plan, consumer_organization=None):
 
         consumer_organization = consumer_organization or self.consumer_organization
         if not consumer_organization:
