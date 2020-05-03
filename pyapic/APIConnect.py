@@ -311,6 +311,31 @@ class APIConnect:
         return response.json()
 
 
+    def product_replace(self, organization, catalog, product, files, space=None, product_name=None, product_version=None, product_id=None):
+
+        if not product_name and not product_version:
+            if not product_id:
+                raise APIConnectError("Replaced product name and version, or product id must be scpecified.")
+
+        if space:
+            url = f"https://{self.manager}/api/spaces/{organization}/{catalog}/{space}/publish"
+            url = f"https://{self.manager}/api/spaces/{organization}/{catalog}/{space}/products/{product-name}/{product-version}/replace"
+            url = f"https://{self.manager}/api/spaces/{organization}/{catalog}/{space}/products/{product-id}/replace"
+        else:
+            url = f'https://{self.manager}/api/catalogs/{organization}/{catalog}/publish'
+        headers = {
+            # 'Content-Type': 'multipart/form-data', ¡Do not set Content-Type!, requests will do it
+            "Accept": "application/json",
+            "Authorization": f"Bearer {self.token}"
+        }
+
+        response = requests.post(url, headers=headers, files=files, verify=self.verify_ssl, timeout=300)
+        self.debug_response(response)
+        response.raise_for_status()
+
+        return response.json()
+
+
     def product_get(self, organization, catalog, product, version=None):
 
         url = f"https://{self.manager}/api/catalogs/{organization}/{catalog}/products/{product}"
